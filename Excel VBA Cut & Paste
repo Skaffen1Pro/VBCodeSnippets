@@ -1,0 +1,26 @@
+Option Explicit
+Sub CutAndPaste()
+
+'Macro to add Duplicate Data zones values together
+'
+Dim lRow1 As Long, lCol1 As Long
+Dim pasteRow1 As Long
+Dim sValue1, sValue2, curVar As String
+ 
+    pasteRow1 = 200
+    
+    For lRow1 = 80 To 105
+        curVar = ActiveSheet.Cells(lRow1, 1)
+        For lCol1 = 3 To 215
+            sValue1 = ActiveSheet.Cells(lRow1, lCol1)
+            If sValue1 > "" Then
+                ActiveSheet.Range(Cells(lRow1, lCol1), Cells(lRow1, lCol1 + 1)).Select
+                Selection.Cut
+                ActiveSheet.Range(Cells(pasteRow1, 2), Cells(pasteRow1, 3)).Select
+                ActiveSheet.Paste
+                ActiveSheet.Cells(pasteRow1, 1) = curVar
+                pasteRow1 = pasteRow1 + 1
+            End If
+        Next
+    Next
+End Sub
