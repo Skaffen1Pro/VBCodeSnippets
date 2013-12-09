@@ -1,0 +1,62 @@
+Option Explicit
+
+Sub BasicFOAF()
+'
+Dim f As Long, i As Long, outFOAFname, outFOAFproject, outFOAFnumber, outFOAFmbox, basicOut
+Dim foafKnowsEmail, foafKnowsName
+f = FreeFile
+Open "c:\Documents and Settings\" & (Environ$("Username")) & "\My Documents\FOAF_RawData.txt" For Output As #f
+
+'basic header for RDF FOAF
+basicOut = "<rdf:RDF"
+Print #f, basicOut
+basicOut = "    xmlns:rdf=" & Chr(34) & "http://www.w3.org/1999/02/22-rdf-syntax-ns#" & Chr(34)
+Print #f, basicOut
+basicOut = "    xmlns:foaf=" & Chr(34) & "http://xmlns.com/foaf/0.1/" & Chr(34)
+Print #f, basicOut
+basicOut = "    xmlns:rdfs=" & Chr(34) & "http://www.w3.org/2000/01/rdf-schema#" & Chr(34) & ">" & vbCrLf
+Print #f, basicOut
+
+'loop through columns and print to file with some bits n pieces
+For i = 2 To 40
+
+basicOut = "<foaf:Person>"
+Print #f, basicOut
+
+outFOAFname = "<foaf:name>" & Cells(i, 4).Value & "</foaf:name>"
+Print #f, outFOAFname
+
+outFOAFproject = "<foaf:mbox rdf:resource=" & Chr(34) & "mailto:" & Cells(i, 6).Value & Chr(34) & "/>"
+Print #f, outFOAFproject
+
+outFOAFnumber = "<foaf:phone rdf:resource=" & Chr(34) & Cells(i, 5).Value & Chr(34) & "/>"
+Print #f, outFOAFnumber
+
+basicOut = "    <foaf:knows>"
+Print #f, basicOut
+basicOut = "        <foaf:Person>"
+Print #f, basicOut
+
+foafKnowsEmail = "            <foaf:mbox rdf:resource=" & Chr(34) & "mailto:" & Cells(i, 8) & Chr(34) & " />"
+Print #f, foafKnowsEmail
+
+foafKnowsName = "            <foaf:name>" & Cells(i, 7) & "</foaf:name>"
+Print #f, foafKnowsName
+
+basicOut = "        </foaf:Person>"
+Print #f, basicOut
+
+basicOut = "    </foaf:knows>"
+Print #f, basicOut
+
+basicOut = "</foaf:Person>" & vbCrLf
+Print #f, basicOut
+
+Next
+
+basicOut = "</rdf:RDF>"
+Print #f, basicOut
+
+Close #f
+
+End Sub
